@@ -1,0 +1,71 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor / IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+logs/
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.venv/
+venv/
+env/
+pip-wheel-metadata/
+.pytest_cache/
+.mypy_cache/
+.ipynb_checkpoints/
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-store/
+
+# Build / dist
+build/
+dist/
+out/
+target/
+
+# Cache
+.cache/
+.temp/
+tmp/
+
+# Dataset / model / large files
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+*.onnx
+*.pkl
+*.npy
+*.npz
+*.csv
+*.jsonl
+
+# Docker / local config
+docker-compose.override.yml
+
+# Secrets / keys
+*.pem
+*.key
+*.crt
+serviceAccountKey.json
+credentials.json
