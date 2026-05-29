@@ -21,7 +21,7 @@ typedef struct Student_SList {
     void (*add_student)(Student_SList *self, int id, char name[], int score);
     void (*delete_student)(Student_SList *self, int id);
     void (*update_student)(Student_SList *self, int id, int score);
-    Student *(*find_students)(Student_SList *self, int id);
+    Student *(*find_student)(Student_SList *self, int id);
     void (*list_students)(Student_SList *self);
     void (*stats_students)(Student_SList *self);
     int (*is_duplicate)(Student_SList *self, int id);
@@ -32,7 +32,7 @@ void init_Student_SList();
 void add_student(Student_SList *self, int id, char name[], int score);
 void delete_student(Student_SList *self, int id);
 void update_student(Student_SList *self, int id, int score);
-Student *find_students(Student_SList *self, int id);
+Student *find_student(Student_SList *self, int id);
 void list_students(Student_SList *self);
 void stats_students(Student_SList *self);
 int is_duplicate(Student_SList *self, int id);
