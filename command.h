@@ -3,6 +3,8 @@
  * 
  * 26.05.28 자료에 있는 것으로 선언 완료, shellResult 자료에 이어서 추가 선언
  * 
+ * 26.05.29 commands 배열을 c파일로 옮김, execute_command 함수 정의
+ * 
  */
 
 typedef enum {
@@ -35,6 +37,8 @@ typedef struct {
     const char* description;
 } Command;
 
+shellResult execute_command(int argc, char **argv);
+
 shellResult handle_save(int argc, char** argv);
 shellResult handle_reload(int argc, char** argv);
 shellResult handle_add(int argc, char** argv);
@@ -47,30 +51,7 @@ shellResult handle_help(int argc, char** argv);
 shellResult handle_clear(int argc, char** argv);
 shellResult handle_exit(int argc, char** argv);
 
-#ifdef ADMIN_MODE
-Command commands[] = {
-    {"save", handle_save, "save", "Save students to CSV"},
-    {"reload", handle_reload, "reload", "Reload students from CSV"},
-    {"add", handle_add, "add <id> <name> <score>", "Add a student"},
-    {"delete", handle_delete, "delete <id>", "Delete a student"},
-    {"update", handle_update, "update <id> <score>", "Update student score"},
-    {"find", handle_find, "find <id>", "Find student"},
-    {"list", handle_list, "list", "List students"},
-    {"stats", handle_stats, "stats", "Show stats"},
-    {"help", handle_help, "help", "Show help"},
-    {"clear", handle_clear, "clear", "Clear screen"},
-    {"exit", handle_exit, "exit", "Exit shell"}
-};
-#endif
 
-#ifdef CLIENT_MODE
-Command commands[] = {
-    {"reload", handle_reload, "reload", "Reload students from CSV"},
-    {"find", handle_find, "find <id>", "Find student"},
-    {"list", handle_list, "list", "List students"},
-    {"stats", handle_stats, "stats", "Show stats"},
-    {"help", handle_help, "help", "Show help"},
-    {"clear", handle_clear, "clear", "Clear screen"},
-    {"exit", handle_exit, "exit", "Exit shell"}
-};
-#endif
+static int is_allright_id(char *str);
+static int is_allright_name(char *str);
+static int is_allright_score(char *str);
