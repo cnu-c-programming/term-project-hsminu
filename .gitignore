@@ -9,6 +9,7 @@ Thumbs.db
 *.swo
 .vs/
 
+
 # Logs
 *.log
 logs/
