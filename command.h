@@ -5,7 +5,12 @@
  * 
  * 26.05.29 commands 배열을 c파일로 옮김, execute_command 함수 정의
  * 
+ * 26.05.30 
+ * 
  */
+
+#ifndef STUDENT_H
+#define STUDENT_H
 
 typedef enum {
     SHELL_OK = 0,
@@ -51,7 +56,11 @@ shellResult handle_help(int argc, char** argv);
 shellResult handle_clear(int argc, char** argv);
 shellResult handle_exit(int argc, char** argv);
 
+void print_result(shellResult result);
+
 
 static int is_allright_id(char *str);
 static int is_allright_name(char *str);
 static int is_allright_score(char *str);
+
+#endif

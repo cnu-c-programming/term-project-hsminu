@@ -97,7 +97,7 @@ void run_command_file(const char *cmd_file, const char *csv_path) {
 }
 
 int main(int argc, char *argv[]) {
-    const char *csv_path  = "students.csv"; /* default CSV file */
+    csv_path  = "students.csv"; /* default CSV file */
     const char *cmd_file  = NULL;           /* -f <file> argument */
 
     init_Student_SList(&students);
@@ -122,19 +122,21 @@ int main(int argc, char *argv[]) {
 
 #ifdef ADMIN_MODE
     /* Admin shell: supports add, delete, update, save, load, sort, list, find, help, exit */
-    if (cmd_file) {
+    /*if (cmd_file) {
         run_command_file(cmd_file);
     } else {
         run_shell();
-    }
+    }*/
+   run_shell();
 
 #elif defined(CLIENT_MODE)
     /* Client shell: supports find, list, help, exit  (read-only) */
+    /*
     if (cmd_file) {
         run_command_file(cmd_file, csv_path);
     } else {
         run_shell();
-    }
+    }*/
 
 #else
 #error "Define either -DADMIN_MODE or -DCLIENT_MODE when compiling."

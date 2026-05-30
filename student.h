@@ -8,13 +8,18 @@
  * 
  */
 
+ #ifndef STUDENT_H
+ #define STUDENT_H
+
+typedef struct Student Student;
+typedef struct Student_SList Student_SList;
 
 typedef struct Student {
     int id;
     char name[32];
     int score;
     struct Student* next;
-} Student;
+};
 
 typedef struct Student_SList {
     Student *head;
@@ -28,7 +33,7 @@ typedef struct Student_SList {
     void (*list_students)(Student_SList *self);
     void (*stats_students)(Student_SList *self);
     int (*is_duplicate)(Student_SList *self, int id);
-}Student_SList;
+};
 
 void init_Student_SList();
 
@@ -39,3 +44,5 @@ Student *find_student(Student_SList *self, int id);
 void list_students(Student_SList *self);
 void stats_students(Student_SList *self);
 int is_duplicate(Student_SList *self, int id);
+
+#endif

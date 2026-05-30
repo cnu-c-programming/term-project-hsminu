@@ -5,6 +5,9 @@
  * 
  */
 
+#ifndef FILE_IO_H
+#define FILE_IO_H
+
 #include "command.h"
 #include "student.h"
 
@@ -14,3 +17,5 @@ shellResult reload_students_csv();
 
 static void delete_newline(char *str);
 static int parsing_rest(char *str, int *id, char *name, int *score);
+
+#endif
