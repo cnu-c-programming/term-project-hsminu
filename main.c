@@ -12,11 +12,22 @@
  *   ./admin_shell -f commands.txt [students.csv]
  *   ./client_shell [students.csv]
  *   ./client_shell -f commands.txt [students.csv]
+ * 
+ * 26.05.30 run_shell 구현, command_file 미구현
+ * 
+ * 
  */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#include "student.h"
+#include "file_io.h"
+#include "command.h"
+
+Student_SList students;
+const char *csv_path;
 
 /* TODO: Add your own header includes here */
 /* #include "student.h"  */
@@ -30,9 +41,47 @@
  *   - Dispatch to the appropriate handler function.
  *   - Loop until the user types "exit" or EOF.
  * --------------------------------------------------------------- */
-void run_shell(const char *csv_path) {
+static int parse_line(char *line, char **argv) {
+    int argc = 0;
+    char *token = strtok(line, " ");
+
+    while(token != NULL && argc != 5) {
+        argv[argc] = token;
+        token = strtok(NULL, " ");
+        argc ++;
+    }
+
+    return argc;
+}
+
+void run_shell() {
     /* TODO */
-    (void)csv_path;
+    char line[128];
+    char *argv[5];
+
+    while(1) {
+        #ifdef ADMIN_MODE
+        printf("admin> ");
+
+        #elif defined(CLIENT_MODE)
+        printf("client> ");
+        #else
+        #error "Define either -DADMIN_MODE or -DCLIENT_MODE when compiling."
+        #endif
+
+        if(fgets(line, sizeof(line), stdin) == NULL) {
+            break;
+        }
+
+        int argc = parse_line(line, argv);
+        shellResult result = execute_command(argc, argv);
+
+        if(result == SHELL_EXIT) {
+            break;
+        }
+    }
+
+    
 }
 
 /* ---------------------------------------------------------------
@@ -50,6 +99,8 @@ void run_command_file(const char *cmd_file, const char *csv_path) {
 int main(int argc, char *argv[]) {
     const char *csv_path  = "students.csv"; /* default CSV file */
     const char *cmd_file  = NULL;           /* -f <file> argument */
+
+    init_Student_SList(&students);
 
     /* TODO: Parse command-line arguments.
      *   Supported flags:
@@ -72,9 +123,9 @@ int main(int argc, char *argv[]) {
 #ifdef ADMIN_MODE
     /* Admin shell: supports add, delete, update, save, load, sort, list, find, help, exit */
     if (cmd_file) {
-        run_command_file(cmd_file, csv_path);
+        run_command_file(cmd_file);
     } else {
-        run_shell(csv_path);
+        run_shell();
     }
 
 #elif defined(CLIENT_MODE)
@@ -82,12 +133,13 @@ int main(int argc, char *argv[]) {
     if (cmd_file) {
         run_command_file(cmd_file, csv_path);
     } else {
-        run_shell(csv_path);
+        run_shell();
     }
 
 #else
 #error "Define either -DADMIN_MODE or -DCLIENT_MODE when compiling."
 #endif
 
+    printf("Goodbye.\n");
     return 0;
 }
