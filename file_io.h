@@ -8,9 +8,9 @@
 #include "command.h"
 #include "student.h"
 
-shellResult load_students_csv(Student_SList *list, const char *filename);
-shellResult save_students_csv(Student_SList *list, const char *filename);
-shellResult reload_students_csv(Student_SList *list, const char *filename);
+shellResult load_students_csv();
+shellResult save_students_csv();
+shellResult reload_students_csv();
 
 static void delete_newline(char *str);
-static void parsing_rest(char *str, int *id, char *name, int *score);
+static int parsing_rest(char *str, int *id, char *name, int *score);

@@ -10,9 +10,10 @@
 #include <stdlib.h>
 
 extern Student_SList students;
+extern const char *csv_path;
 
-shellResult save_students_csv(const char *filename) {
-    FILE *fp = fopen(filename, "w");
+shellResult save_students_csv() {
+    FILE *fp = fopen(csv_path, "w");
     if(fp == NULL ) {
         return SHELL_ERR_FILE_OPEN;
     }
@@ -31,8 +32,8 @@ shellResult save_students_csv(const char *filename) {
     return SHELL_OK;
 }
 
-shellResult load_students_csv(const char *filename) {
-    FILE *fp = fopen(filename, "r");
+shellResult load_students_csv() {
+    FILE *fp = fopen(csv_path, "r");
     if(fp == NULL){
         return SHELL_ERR_FILE_OPEN;
     }
@@ -52,7 +53,7 @@ shellResult load_students_csv(const char *filename) {
         int score;
 
         delete_newline(line);
-        parsing_rest(line, &id, name, &score);
+        if(parsing_rest(line, &id, name, &score) )
 
         students.add_student(&students, id, name, score);
     }
@@ -72,15 +73,26 @@ static void delete_newline(char *str){
 }
 
 // ,파싱
-static void parsing_rest(char *str, int *id, char *name, int *score) {
+static int parsing_rest(char *str, int *id, char *name, int *score) {
     int argc = 0;
+
     char *token = strtok(str, ",");
-
+    if(!is_allright_id(token)) {
+        return 0;
+    }
     *id = atoi(token);
-    token = strtok(NULL, ",");
-    
-    strcpy(name, token);
-    token = strtok(NULL, ",");
 
+    token = strtok(NULL, ",");
+    if(!is_allright_name(token)){
+        return 0;
+    }
+    strcpy(name, token);
+
+    token = strtok(NULL, ",");
+    if(!is_allright_score(token)) {
+        return 0;
+    }
     *score = atoi(token);
+
+    return 1;
 }
