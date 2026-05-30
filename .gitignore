@@ -9,6 +9,8 @@ Thumbs.db
 *.swo
 .vs/
 
+*.csv
+
 
 # Logs
 *.log
