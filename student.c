@@ -15,6 +15,7 @@
 void init_Student_SList(Student_SList *self) {
     self->head = NULL;
     self->size = 0;
+    self->dirty_flag = 0;
 
     self->add_student = add_student;
     self->delete_student = delete_student;
@@ -70,7 +71,7 @@ void delete_student(Student_SList *self, int id) {
 void update_student(Student_SList *self, int id, int score) {
     Student *temp = find_student(self, id);
     temp->id = score;
-}
+} 
 
 Student *find_student(Student_SList *self, int id) {
     for(Student *p = self->head; p!=NULL; p=p->next){
@@ -83,7 +84,18 @@ Student *find_student(Student_SList *self, int id) {
 }
 
 void list_students(Student_SList *self) {
+    if(self->size == 0) {
+        printf("No students found.");
+        return;
+    }
 
+    printf("ID  NAME        Score");
+
+    Student *p = self->head;
+    for(int i=1; i<=self->size; i++) {
+        printf("%-4d%-12s%-5d", p->id, p->name, p->score);
+        p = p->next;
+    }
 }
 
 void stats_students(Student_SList *self) {
