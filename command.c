@@ -3,10 +3,13 @@
  * 
  * 26.05.29 execute_command, add 함수 구현
  * 
+ * 26.05.30 save, delete, find, exit 함수 구현
+ * 
  */
 
 #include "command.h"
 #include "student.h"
+#include "file_io.h"
 #include <string.h>
 #include <stdlib.h>
 
@@ -83,6 +86,90 @@ shellResult handle_add(int argc, char **argv) {
 
     students.add_student(&students, id, name, score);
     return SHELL_OK;
+}
+
+shellResult handle_save(int argc, char **argv) {
+    if(argc > 1){
+        return SHELL_ERR_INVALID_ARGUMENT;
+    }
+    
+    save_students_csv();
+
+    return SHELL_OK;
+}
+
+shellResult handle_delete(int argc, char **argv) {
+    if(argc < 2) {
+        return SHELL_ERR_MISSING_ARGUMENT;
+    }
+    if(argc > 2) {
+        return SHELL_ERR_INVALID_ARGUMENT;
+    }
+
+    if(!is_allright_id(argv[1])) {
+        return SHELL_ERR_INVALID_ARGUMENT;
+    }
+
+    int id = atoi(argv[1]);
+    students.delete_student(&students, id);
+    return SHELL_OK;
+}
+
+shellResult handle_exit(int argc, char **argv) {
+    if(argc > 1){
+        return SHELL_ERR_INVALID_ARGUMENT;
+    }
+
+    return SHELL_EXIT;
+}
+
+shellResult handle_find(int argc, char **argv) {
+    if(argc < 2) {
+        return SHELL_ERR_MISSING_ARGUMENT;
+    }
+    if(argc > 2) {
+        return SHELL_ERR_INVALID_ARGUMENT;
+    }
+    if(!is_allright_id(argv[1])) {
+        return SHELL_ERR_INVALID_ARGUMENT;
+    }
+
+    int id = atoi(argv[1]);
+    Student *temp = students.find_student(&students, id);
+    if(temp == NULL) {
+        return SHELL_ERR_STUDENT_NOT_FOUND;
+    }
+
+    printf("ID: %d\n", temp->id);
+    printf("Name: %s\n", temp->name);
+    printf("Score: %d\n", temp->score);
+
+    return SHELL_OK;
+}
+
+shellResult handle_stats(int argc, char **argv) {
+
+}
+
+shellResult handle_clear(int argc, char **argv) {
+
+}
+
+shellResult handle_help(int argc, char **argv) {
+
+}
+
+shellResult handle_list(int argc, char **argv) {
+    if(argc > 1){
+        return SHELL_ERR_INVALID_ARGUMENT;
+    }
+    
+    students.list_students(&students);
+    return SHELL_OK;
+}
+
+void print_result(shellResult result, int line) {
+    ;
 }
 
 // 정수인지 판별
