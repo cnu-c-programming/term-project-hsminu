@@ -4,6 +4,8 @@
  * 26.05.28 기본 구조체 선언, 구조체에 함수 포인터를 선언해 구현하기로 함. 
  * 데이터 오류에 대해서는 여기서 처리할지, command에서 처리할지 고민중.
  * 
+ * 26.05.30 students에 dirty_flag 추가. 수정 사항이 있는 상태면 dirty_flag = 1, 없으면 0
+ * 
  */
 
 
@@ -17,6 +19,7 @@ typedef struct Student {
 typedef struct Student_SList {
     Student *head;
     int size;
+    int dirty_flag;
 
     void (*add_student)(Student_SList *self, int id, char name[], int score);
     void (*delete_student)(Student_SList *self, int id);
