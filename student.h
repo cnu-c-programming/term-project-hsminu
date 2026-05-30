@@ -14,14 +14,14 @@
 typedef struct Student Student;
 typedef struct Student_SList Student_SList;
 
-typedef struct Student {
+struct Student {
     int id;
     char name[32];
     int score;
     struct Student* next;
 };
 
-typedef struct Student_SList {
+struct Student_SList {
     Student *head;
     int size;
     int dirty_flag;

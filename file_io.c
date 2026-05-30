@@ -5,12 +5,18 @@
  * 
  */
 
-#include "file_io.h"
+#include "student.h"
+#include "command.h"
+#include "shell_result.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 extern Student_SList students;
 extern const char *csv_path;
+
+static void delete_newline(char *str);
+static int parsing_rest(char *str, int *id, char *name, int *score);
 
 shellResult save_students_csv() {
     FILE *fp = fopen(csv_path, "w");
@@ -42,6 +48,7 @@ shellResult load_students_csv() {
     if(fgets(line, sizeof(line), fp) == NULL) {
         return SHELL_ERR_FILE_READ;
     }
+
     delete_newline(line);
     if(strcmp(line, "id,name,score") != 0){
         return SHELL_ERR_FILE_READ;
@@ -53,7 +60,9 @@ shellResult load_students_csv() {
         int score;
 
         delete_newline(line);
-        if(parsing_rest(line, &id, name, &score) )
+        if(!parsing_rest(line, &id, name, &score)){
+            return SHELL_ERR_INVALID_ARGUMENT;
+        }
 
         students.add_student(&students, id, name, score);
     }
@@ -96,3 +105,4 @@ static int parsing_rest(char *str, int *id, char *name, int *score) {
 
     return 1;
 }
+

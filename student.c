@@ -6,9 +6,14 @@
  * 26.05.29 update, find, stats 구현. list출력에 대해서는 command에서 처리할지 생각중.
  * 중복 검사에 대해서는 함수 호출 전 command에서 find 함수를 호출해 그 값이 NULL이면 중복된 게 없다고 판단할 예정.
  * 
+ * 26.05.30 list 함수 구현
+ * 
+ * 
+ * 
  */
 
 #include "student.h"
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -89,11 +94,11 @@ void list_students(Student_SList *self) {
         return;
     }
 
-    printf("ID  NAME        Score");
+    printf("ID  NAME        Score\n");
 
     Student *p = self->head;
     for(int i=1; i<=self->size; i++) {
-        printf("%-4d%-12s%-5d", p->id, p->name, p->score);
+        printf("%-4d%-12s%-5d\n", p->id, p->name, p->score);
         p = p->next;
     }
 }

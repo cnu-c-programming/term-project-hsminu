@@ -10,6 +10,7 @@
 #include "command.h"
 #include "student.h"
 #include "file_io.h"
+#include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 
@@ -168,12 +169,20 @@ shellResult handle_list(int argc, char **argv) {
     return SHELL_OK;
 }
 
+shellResult handle_reload(int argc, char **argv) {
+
+}
+
+shellResult handle_update(int argc, char **argv) {
+
+}
+
 void print_result(shellResult result, int line) {
-    ;
+    
 }
 
 // 정수인지 판별
-static int is_allright_id(char *str) {
+int is_allright_id(char *str) {
     if(str == NULL){
         return 0;
     }
@@ -187,7 +196,7 @@ static int is_allright_id(char *str) {
 }
 
 // name 조건 판별
-static int is_allright_name(char *str) {
+int is_allright_name(char *str) {
     if(str == NULL){
         return 0;
     }
@@ -204,7 +213,7 @@ static int is_allright_name(char *str) {
 }
 
 //score 판별
-static int is_allright_score(char *str) {
+int is_allright_score(char *str) {
     if(str == NULL){
         return 0;
     }

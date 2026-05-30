@@ -43,6 +43,13 @@ const char *csv_path;
  * --------------------------------------------------------------- */
 static int parse_line(char *line, char **argv) {
     int argc = 0;
+    for(int i = 0; line[i] != '\0'; i++) {
+        if(line[i] == '\n') {
+            line[i] = '\0';
+            break;
+        }
+    }
+
     char *token = strtok(line, " ");
 
     while(token != NULL && argc != 5) {
@@ -101,6 +108,7 @@ int main(int argc, char *argv[]) {
     const char *cmd_file  = NULL;           /* -f <file> argument */
 
     init_Student_SList(&students);
+    load_students_csv();
 
     /* TODO: Parse command-line arguments.
      *   Supported flags:
