@@ -5,6 +5,8 @@
  * 
  * 26.05.30 save, delete, find, exit 함수 구현
  * 
+ * 26.05.31 add 함수 중복 방지, print_result, stats, help, clear 함수 구현
+ * 
  */
 
 #include "command.h"
@@ -85,6 +87,10 @@ shellResult handle_add(int argc, char **argv) {
     char *name = argv[2];
     int score = atoi(argv[3]);
 
+    if(students.find_student(&students, id) != NULL){
+        return SHELL_ERR_DUPLICATE_STUDENT;
+    }
+
     students.add_student(&students, id, name, score);
     return SHELL_OK;
 }
@@ -93,10 +99,8 @@ shellResult handle_save(int argc, char **argv) {
     if(argc > 1){
         return SHELL_ERR_INVALID_ARGUMENT;
     }
-    
-    save_students_csv();
 
-    return SHELL_OK;
+    return save_students_csv();
 }
 
 shellResult handle_delete(int argc, char **argv) {
@@ -112,6 +116,10 @@ shellResult handle_delete(int argc, char **argv) {
     }
 
     int id = atoi(argv[1]);
+    if(students.find_student(&students, id) == NULL){
+        return SHELL_ERR_STUDENT_NOT_FOUND;
+    }
+
     students.delete_student(&students, id);
     return SHELL_OK;
 }
@@ -149,15 +157,36 @@ shellResult handle_find(int argc, char **argv) {
 }
 
 shellResult handle_stats(int argc, char **argv) {
+    if(argc > 1){
+        return SHELL_ERR_INVALID_ARGUMENT;
+    }
+    if(students.size == 0) {
+        return SHELL_ERR_EMPTY_LIST ;
+    }
 
+    students.stats_students(&students);
+    return SHELL_OK;
 }
 
 shellResult handle_clear(int argc, char **argv) {
-
+    if(argc > 1){
+        return SHELL_ERR_INVALID_ARGUMENT;
+    }
+    printf("\033[2J\033[H");
+    return SHELL_OK;
 }
 
 shellResult handle_help(int argc, char **argv) {
+    if(argc > 1){
+        return SHELL_ERR_INVALID_ARGUMENT;
+    }
 
+    printf("Commands: ");
+    for (int i = 0; i < command_count; i++) {
+        printf("%-15s %s\n", commnands[i].usage, commands[i].description);
+    }
+
+    return SHELL_OK;
 }
 
 shellResult handle_list(int argc, char **argv) {
@@ -174,7 +203,68 @@ shellResult handle_reload(int argc, char **argv) {
 }
 
 shellResult handle_update(int argc, char **argv) {
+    if(argc < 3) {
+        return SHELL_ERR_MISSING_ARGUMENT;
+    }
+    if(argc > 3) {
+        return SHELL_ERR_INVALID_ARGUMENT;
+    }
+    if(!is_allright_id(argv[1])) {
+        return SHELL_ERR_INVALID_ARGUMENT;
+    }
+    if(!is_allright_score(argv[2])){
+        return SHELL_ERR_INVALID_ARGUMENT;
+    }
 
+    int id = atoi(argv[1]);
+    Student *temp = students.find_student(&students, id);
+    if(temp == NULL) {
+        return SHELL_ERR_STUDENT_NOT_FOUND;
+    }
+
+    int score = atoi(argv[2]);
+    temp->score = score;
+
+    return SHELL_OK;
+}
+
+void print_result(shellResult result) {
+    printf("Error: ");
+
+    if(result == SHELL_ERR_UNKNOWN_COMMAND) {
+        printf("unkknown command.");
+    }
+    if(result == SHELL_ERR_INVALID_ARGUMENT) {
+        printf("invalid argument.");
+    }
+    if(result == SHELL_ERR_MISSING_ARGUMENT) {
+        printf("missing argument.");
+    }
+    if(result == SHELL_ERR_FILE_OPEN) {
+        printf("can't open file.");
+    }
+    if(result == SHELL_ERR_FILE_READ) {
+        printf("can't read file.");
+    }
+    if(result == SHELL_ERR_FILE_WRITE) {
+        printf("can't write file.");
+    }
+    if(result == SHELL_ERR_STUDENT_NOT_FOUND) {
+        printf("student not found.");
+    }
+    if(result == SHELL_ERR_INVALID_ID) {
+        printf("invalid id.");
+    }
+    if(result == SHELL_ERR_INVALID_NAME) {
+        printf("invalid name.");
+    }
+    if(result == SHELL_ERR_INVALID_SCORE) {
+        printf("invalid score.");
+    }
+    if(result == SHELL_ERR_EMPTY_LIST) {
+        printf("empty students.");
+    }
+    printf("\n");
 }
 
 void print_result(shellResult result, int line) {
@@ -212,7 +302,7 @@ int is_allright_name(char *str) {
     return 1;
 }
 
-//score 판별
+// score 판별
 int is_allright_score(char *str) {
     if(str == NULL){
         return 0;
